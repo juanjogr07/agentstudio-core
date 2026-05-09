@@ -30,7 +30,12 @@ export class ComponentRegistry {
   /** Injected into the CopilotKit system prompt so the agent knows what it can render */
   getDescriptions(): string {
     return this.list()
-      .map(c => `- ${c.name} [${c.category}]: ${c.description}`)
+      .map(c => {
+        const fields = c.requiredData?.length
+          ? ` | required data fields: ${c.requiredData.join(', ')}`
+          : ''
+        return `- ${c.name} [${c.category}]: ${c.description}${fields}`
+      })
       .join('\n')
   }
 }
