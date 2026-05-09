@@ -1,6 +1,6 @@
 # M3 (agentstudio-actions) API Reference
 
-For use by M1 and M2 developers. Source: JuanGomez-Sequal/agentstudio-actions
+For use by M1 and M2 developers. Source: juanjogr07/agentstudio-actions
 
 ## Exported Symbol
 

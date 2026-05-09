@@ -19,7 +19,7 @@ You own the **host application**. Your job: Next.js shell + CopilotKit integrati
 
 ```bash
 # 1. Clone this repo
-git clone https://github.com/JuanGomez-Sequal/agentstudio-core
+git clone https://github.com/juanjogr07/agentstudio-core
 cd agentstudio-core
 
 # 2. Install deps (includes M2 and M3 from GitHub)
@@ -52,8 +52,8 @@ If you change `src/contracts/types.ts`, notify M2 and M3 teams — they need to 
 
 M2 and M3 are npm dependencies in `package.json`:
 ```json
-"@agentstudio/board": "github:JuanGomez-Sequal/agentstudio-board",
-"@agentstudio/actions": "github:JuanGomez-Sequal/agentstudio-actions"
+"@agentstudio/board": "github:juanjogr07/agentstudio-board",
+"@agentstudio/actions": "github:juanjogr07/agentstudio-actions"
 ```
 
 To pick up new M2/M3 commits: `npm install` (re-fetches from GitHub).

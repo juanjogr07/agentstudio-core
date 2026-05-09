@@ -9,9 +9,9 @@ A Next.js application where an AI agent generates interactive UI at runtime for 
 
 | Module | Repo | Role |
 |--------|------|------|
-| M1 — agentstudio-core | JuanGomez-Sequal/agentstudio-core | Host app, CopilotKit, ComponentRegistry |
-| M2 — agentstudio-board | JuanGomez-Sequal/agentstudio-board | Visualization React components |
-| M3 — agentstudio-actions | JuanGomez-Sequal/agentstudio-actions | Action/confirmation React components |
+| M1 — agentstudio-core | juanjogr07/agentstudio-core | Host app, CopilotKit, ComponentRegistry |
+| M2 — agentstudio-board | juanjogr07/agentstudio-board | Visualization React components |
+| M3 — agentstudio-actions | juanjogr07/agentstudio-actions | Action/confirmation React components |
 
 ## How They Connect
 
