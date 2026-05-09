@@ -1,11 +1,11 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { CopilotKit } from '@copilotkit/react-core'
+import { CopilotKit, useCopilotReadable, useCopilotAction, useCopilotChat } from '@copilotkit/react-core'
 import { CopilotSidebar } from '@copilotkit/react-ui'
-import { useCopilotReadable, useCopilotAction } from '@copilotkit/react-core'
+import { TextMessage, Role } from '@copilotkit/runtime-client-gql'
 import { ComponentRegistry } from '@/contracts/registry'
-import type { AgentDecision } from '@/contracts/types'
+import type { AgentDecision, AgentAction } from '@/contracts/types'
 
 async function loadModules() {
   const registry = ComponentRegistry.getInstance()
@@ -17,10 +17,33 @@ async function loadModules() {
   registry.registerAll(actions.actionComponents)
 }
 
+function actionToPrompt(action: AgentAction): string {
+  const id = action.payload?.incidentId ?? action.payload?.id ?? ''
+  switch (action.type) {
+    case 'rollback':
+      return `[ACCIÓN CONFIRMADA] El usuario aprobó un rollback${id ? ` del incidente ${id}` : ''}. Muestra RollbackCard con los detalles del deployment a revertir.`
+    case 'escalate':
+      return `[ACCIÓN CONFIRMADA] El usuario aprobó escalar el incidente${id ? ` ${id}` : ''}. Muestra EscalateCard para notificar al equipo de guardia.`
+    case 'workflow_complete':
+      return `[WORKFLOW COMPLETADO] Todos los pasos del workflow finalizaron exitosamente. Muestra un resumen del resultado al usuario.`
+    default:
+      return `[ACCIÓN: ${action.label}] El usuario ejecutó una acción. Payload: ${JSON.stringify(action.payload)}. Responde con los componentes UI más apropiados.`
+  }
+}
+
 function AgentWarRoom() {
   const registry = ComponentRegistry.getInstance()
   const [activeComponents, setActiveComponents] = useState<AgentDecision['components']>([])
   const [modulesLoaded, setModulesLoaded] = useState(false)
+  const { appendMessage } = useCopilotChat()
+
+  const handleAction = async (action: AgentAction) => {
+    if (action.requiresConfirmation) {
+      const ok = window.confirm(`Confirmar: ${action.label}?`)
+      if (!ok) return
+    }
+    await appendMessage(new TextMessage({ content: actionToPrompt(action), role: Role.User }))
+  }
 
   useEffect(() => {
     loadModules().then(() => setModulesLoaded(true))
@@ -81,10 +104,7 @@ function AgentWarRoom() {
                 <Component
                   key={i}
                   data={item.data}
-                  onAction={(action) => {
-                    console.log('Agent action:', action)
-                    // Future: pipe back to agent for follow-up rendering
-                  }}
+                  onAction={handleAction}
                 />
               )
             })}
